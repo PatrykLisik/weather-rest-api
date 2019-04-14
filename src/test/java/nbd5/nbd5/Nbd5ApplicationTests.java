@@ -1,4 +1,4 @@
-package com.nbd5.nbd5;
+package nbd5.nbd5;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
