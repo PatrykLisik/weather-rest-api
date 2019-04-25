@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import nbd5.nbd5.domain.Entry;
 import nbd5.nbd5.services.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 
-@Controller
+@RestController
 public class EntryController {
     private EntryService entryService;
 
@@ -27,22 +27,18 @@ public class EntryController {
     }
 
     @RequestMapping(name = "/entry/list")
-    @ResponseBody()
     public String listentrys() {
-        String responseJSON = gson.toJson(entryService.listAll());
-        return responseJSON;
+        return gson.toJson(entryService.listAll());
     }
 
     @RequestMapping("/entry/show/{id}")
-    @ResponseBody()
     public String getEntry(@PathVariable String id) {
-        String responseJSON = gson.toJson(entryService.getById(UUID.fromString(id)));
-        return responseJSON;
+        return gson.toJson(entryService.getById(UUID.fromString(id)));
     }
 
 
     @RequestMapping(value = "/entry", method = RequestMethod.POST)
-    public void saveOrUpdateEntry(@RequestBody Entry entry) {
+    public void saveOrUpdateEntry(@Valid @RequestBody Entry entry) {
         entryService.saveOrUpdate(entry);
     }
 
