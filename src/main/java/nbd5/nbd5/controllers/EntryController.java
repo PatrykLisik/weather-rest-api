@@ -37,7 +37,10 @@ public class EntryController {
     }
 
 
-    @RequestMapping(value = "/entry", method = {RequestMethod.POST, RequestMethod.PUT})
+    @RequestMapping(
+            value = "/entry",
+            method = {RequestMethod.POST, RequestMethod.PUT}
+    )
     public void saveOrUpdateEntry(@Valid @RequestBody Entry entry) {
         entryService.saveOrUpdate(entry);
     }
