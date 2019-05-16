@@ -26,7 +26,7 @@ services:
     image: cassandra:latest
     command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
     environment:
-      - "CASSANDRA_SEEDS=cassandra"
+      - "CASSANDRA_SEEDS=cassandra-seed"
       - "CASSANDRA_CLUSTER_NAME=Test Cluster"
       #      needed for setting up custom cluster name
       - "CASSANDRA_DC=se1"
