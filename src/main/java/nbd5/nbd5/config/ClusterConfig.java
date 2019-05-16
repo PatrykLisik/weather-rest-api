@@ -53,7 +53,7 @@ public class ClusterConfig extends AbstractClusterConfiguration {
         bean.setKeyspaceDrops(getKeyspaceDrops());
         bean.setStartupScripts(getStartupScripts());
         bean.setShutdownScripts(getShutdownScripts());
-
+        bean.setJmxReportingEnabled(false);
 
         return bean;
     }
