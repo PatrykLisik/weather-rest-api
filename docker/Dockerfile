@@ -10,7 +10,9 @@ RUN mvn dependency:go-offline -B
 # copy your other files
 COPY ./src ./src
 
-## build for release
-RUN mvn install -DskipTests
+COPY ./docker/wait_for_db.sh ./wait_for_db.sh
 
-ENTRYPOINT ["mvn", "spring-boot:run"]
+## build for release
+RUN mvn clean install -Dmaven.test.skip=true
+
+ENTRYPOINT ["mvn","spring-boot:run"]
