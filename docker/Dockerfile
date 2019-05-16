@@ -1,18 +1,8 @@
-# our base build image
-FROM maven:latest
+FROM lpicanco/java11-alpine
 
 # copy the project files
 COPY ./pom.xml ./pom.xml
 
-# build all dependencies
-RUN mvn dependency:go-offline -B
+COPY ./target ./target
 
-# copy your other files
-COPY ./src ./src
-
-COPY ./docker/wait_for_db.sh ./wait_for_db.sh
-
-## build for release
-RUN mvn clean install -Dmaven.test.skip=true
-
-ENTRYPOINT ["mvn","spring-boot:run"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar", "target/nbd5-0.0.1-SNAPSHOT.jar"]
