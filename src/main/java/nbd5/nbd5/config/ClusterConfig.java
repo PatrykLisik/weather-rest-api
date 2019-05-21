@@ -15,12 +15,14 @@ public class ClusterConfig extends AbstractClusterConfiguration {
 
     private final String keyspace;
     private final String hosts;
+    private final Long replicationFactor;
 
     ClusterConfig(
             @Value("${spring.data.cassandra.keyspace-name}") String keyspace,
             @Value("${spring.data.cassandra.contact-points}") String hosts) {
         this.keyspace = keyspace;
         this.hosts = hosts;
+        this.replicationFactor = Long.valueOf(System.getenv("REPLICATION_FACTOR"));
     }
 
     @Bean
@@ -55,6 +57,7 @@ public class ClusterConfig extends AbstractClusterConfiguration {
         bean.setShutdownScripts(getShutdownScripts());
         bean.setJmxReportingEnabled(false);
 
+
         return bean;
     }
 
@@ -64,7 +67,7 @@ public class ClusterConfig extends AbstractClusterConfiguration {
                 CreateKeyspaceSpecification.createKeyspace(keyspace)
                         .ifNotExists()
                         .with(KeyspaceOption.DURABLE_WRITES, true)
-                        .withSimpleReplication();
+                        .withSimpleReplication(replicationFactor);
         return List.of(specification);
     }
 
