@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  java-crud:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "cassandra-seed"
+    environment:
+      - "REPLICATION_FACTOR=3"
+
+  cassandra-seed:
+    image: cassandra:latest
+    ports:
+      - "9042:9042"
+    environment:
+      - "CASSANDRA_SEEDS=cassandra-seed"
+      - "CASSANDRA_CLUSTER_NAME=Test Cluster"
+      #   needed for setting up custom cluster name
+      - "CASSANDRA_DC=se1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+  #    restart: always
+
+  cassandra1:
+    image: cassandra:latest
+    command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
+    environment:
+      - "CASSANDRA_SEEDS=cassandra-seed"
+      - "CASSANDRA_CLUSTER_NAME=Test Cluster"
+      #      needed for setting up custom cluster name
+      - "CASSANDRA_DC=se1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+    depends_on:
+      - cassandra-seed
+  #    restart: always
+
+  cassandra2:
+    image: cassandra:latest
+    command: /bin/bash -c "echo 'Waiting for seed node' && sleep 80 && /docker-entrypoint.sh cassandra -f"
+    environment:
+      - "CASSANDRA_SEEDS=cassandra-seed"
+      - "CASSANDRA_CLUSTER_NAME=Test Cluster"
+      #      needed for setting up custom cluster name
+      - "CASSANDRA_DC=se1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+    depends_on:
+      - cassandra-seed
+#    restart: always
